@@ -71,6 +71,7 @@ class Mixin():
             try:
                 fps = part.steams[0].frameRate
             except:
+                # This for for comskip shitty frames.
                 Log.Debug('Defaulting to 24 fps')
                 fps = 24
 
@@ -84,13 +85,14 @@ class Mixin():
             # Prefer edl.
             for typ in [edl, comskip]:
                 if os.path.isfile(typ):
+                    # https://kodi.wiki/view/Edit_decision_list#MPlayer_EDL
                     if typ.endswith('edl') or typ.endswith('txt'):
                         need_convert = 1
                         data = Core.storage.load(typ)
 
                         # Lets try to parse the damn thing.
                         for line in data.splitlines():
-                            if '#' in line:
+                            if '#' in line or typ.endswith('txt'):
                                 need_convert = fps  # get fps here.
                                 line = line.strip('#', '')
 
